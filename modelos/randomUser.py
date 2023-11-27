@@ -25,3 +25,5 @@ def getRandomUser(type:str)->dict:
         randomUser["matricula"]= data["results"][0]["login"]["password"]
         #test pull request
         #hola
+    elif type=='paciente':
+        pass
