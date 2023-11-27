@@ -23,3 +23,4 @@ print("Matricula: ",randomUser["matricula"])
 def getRandomUser(type:str)->dict:
     if(type="medico"):
         randomUser["matricula"]= data["results"][0]["login"]["password"]
+        #test
