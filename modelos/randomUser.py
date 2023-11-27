@@ -27,4 +27,4 @@ def getRandomUser(type:str)->dict:
         #hola
     elif type=='paciente':
         pass
-        #
+        ##
