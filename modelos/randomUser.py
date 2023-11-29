@@ -30,11 +30,12 @@ def getRandomUsers(type:str,cantidad:int)->list:
         randomUser["email"]= data["results"][ind]["email"]
         randomUser["phone"]= data["results"][ind]["phone"]
         randomUser["dni"]= data["results"][ind]["id"]["value"]
-        print("DNI: ",randomUser["dni"])
-        print("Nombre: ",randomUser["nombre"])
-        print("Phone: ",randomUser["phone"])
-        print("Email: ",randomUser["email"])
-        print("Apellido: ",randomUser["apellido"])
+        # #debug
+        # print("DNI: ",randomUser["dni"])
+        # print("Nombre: ",randomUser["nombre"])
+        # print("Phone: ",randomUser["phone"])
+        # print("Email: ",randomUser["email"])
+        # print("Apellido: ",randomUser["apellido"])
 
         
         if type=="medico":
