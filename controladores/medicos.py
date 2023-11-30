@@ -61,6 +61,4 @@ def editMedico(id_medico):
         medico['email'],
         medico['habilitado']
         )
-    
     return jsonify(medico_editado)
-
