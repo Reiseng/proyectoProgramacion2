@@ -1,6 +1,7 @@
 import csv
 import os
-from randomUser import getRandomUsers
+from modelos.randomUser import getRandomUsers
+
 ruta_archivo_medicos="modelos/medicos.csv"
 
 medicos=[]
@@ -14,8 +15,8 @@ def inicializar_medicos():
 def obtener_medicos():
     return medicos
 
-def obtener_medicos_por_id(id_medico):
-    return medicos[id_medico]
+def obtener_medicos_por_id(id):
+    return medicos[id-1]
 
 def crear_medico_manual(dni:int, nombre:str, apellido:str, matricula:int, telefono:str, email:str):
     global id_medico
@@ -54,6 +55,34 @@ def crear_medicos_randomuserme(cantidad):
         id_medico+=1
     exportar_a_csv()
     return medicos[-cantidad:]
+
+def inhabilitar_medico(id):
+    if id<1 or id>len(medicos)+1:
+        return {"Respuesta":"Indice Invalido"}
+    medicos[id-1]["habilitado"]=False
+    exportar_a_csv()
+    return medicos[id-1]
+
+def habilitar_medico(id):
+    if id<1 or id>len(medicos)+1:
+        return {"Respuesta":"Indice Invalido"}
+    medicos[id-1]["habilitado"]=True
+    exportar_a_csv()
+    return medicos[id-1]
+
+def editar_medico(id,dni:str,nombre:str,apellido:str,matricula:str,telefono:str,email:str,habilitado:bool):
+    if id<1 or id>len(medicos)+1:
+        return {"Respuesta":"Indice Invalido"}
+    medicos[id-1]["dni"]=dni
+    medicos[id-1]["nombre"]=nombre
+    medicos[id-1]["apellido"]=apellido
+    medicos[id-1]["matricula"]=matricula
+    medicos[id-1]["telefono"]=telefono
+    medicos[id-1]["email"]=email
+    medicos[id-1]["habilitado"]=habilitado
+    exportar_a_csv()
+    return medicos[id-1]
+
 
 def importar_datos_desde_csv():
     """
