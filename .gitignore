@@ -1,3 +1,4 @@
 /test.json
 /consignas.md
 .venv
+__pycache__
