@@ -1,1 +1,7 @@
-id, dni, nombre, apellido, matrícula, teléfono, email,habilitado
+id,dni,nombre,apellido,matricula,telefono,email,habilitado
+1,72448069,Clayton,Thompson,802916,(858) 870-9645,clayton.thompson@example.com,True
+2,24797063,Penny,Hunter,875758,(416) 765-2177,penny.hunter@example.com,True
+3,79340666,Jessica,Dixon,395702,(855) 931-7965,jessica.dixon@example.com,False
+4,10499306,Deann,Ford,956919,(545) 571-6558,deann.ford@example.com,True
+5,44168915,Kristina,Watkins,661922,(613) 796-2524,kristina.watkins@example.com,True
+6,11622883,Emiliano,Correa,053052,(891) 963-7161,ritthy.simpson@example.com,True
