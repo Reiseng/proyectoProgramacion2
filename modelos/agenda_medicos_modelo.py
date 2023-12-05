@@ -1,5 +1,6 @@
+# modelos/agenda_medicos_modelo.py
 import csv
-agenda={}
+
 '''
 agenda
 primera dimension:id medico
