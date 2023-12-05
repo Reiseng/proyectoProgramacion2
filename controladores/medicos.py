@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from modelos.medicos_modelo import obtener_medicos,obtener_medicos_por_id,crear_medico_manual,crear_medicos_randomuserme,inhabilitar_medico,habilitar_medico,editar_medico
+
 medicos_bp = Blueprint('medicos', __name__)
 
 @medicos_bp.route('/getMedicos',methods=['GET'])
