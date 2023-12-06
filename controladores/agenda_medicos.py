@@ -12,3 +12,4 @@ def getAgenda():
 def getAgenda_por_medico(id_medico):
     id_medico=str(id_medico)
     return jsonify(agenda[id_medico])
+
