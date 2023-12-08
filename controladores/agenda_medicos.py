@@ -11,6 +11,8 @@ def getAgenda():
 @agenda_bp.route('/agenda/<int:id_medico>',methods=['GET'])
 def getAgenda_por_medico(id_medico):
     id_medico=str(id_medico)
+    if id_medico not in agenda:
+        return {"Error":"Medico no esta en la agenda"},404
     return jsonify(agenda[id_medico])
 
 @agenda_bp.route('/agregaragenda', methods=['POST'])
@@ -51,5 +53,5 @@ def editagenda(id_medico):
 
 @agenda_bp.route('/eliminaragenda/<int:id_medico>/<int:dia_numero>', methods=['DELETE'])
 def eliminaragenda(id_medico, dia_numero):
-    eliminar_agenda(id_medico, dia_numero)
-    return jsonify({"mensaje": f"Se ha eliminado la agenda del medico {id_medico} el dia {dia_numero}"}),200
+    delete_intento=eliminar_agenda(id_medico, dia_numero)
+    return jsonify(delete_intento[0]),delete_intento[1]

@@ -1,6 +1,7 @@
 # modelos/agenda_medicos_modelo.py
 import csv
 import datetime
+import re
 
 '''
 agenda
@@ -9,9 +10,6 @@ segunda dimension:dia_numero
 tercera dimension: array con [hora_inicio,hora_fin,fecha_actualizacion]
 '''
 ruta_archivo_agenda='modelos/agenda_medicos.csv'
-hoy = datetime.datetime.now()
-fecha = hoy.strftime("%d/%m/%Y")
-
 
 def llenarAgenda()->None:
     global agenda
@@ -47,11 +45,11 @@ def convertir_agenda_a_lista():
             csv_list.append(line)
     return csv_list
 
-def agregar_agenda(id, dia_numero, hora_inici, hora_fin):
+def agregar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda
     if str(id) not in agenda:
         agenda[str(id)]={}
-    agenda[str(id)][dia_numero]=[hora_inici,hora_fin,fecha]
+    agenda[str(id)][dia_numero]=[hora_inicio,hora_fin,getDate()]
     escribir_csv()
     return agenda[str(id)][dia_numero]
 
@@ -62,26 +60,39 @@ def editar_agenda(id, dia_numero, hora_inicio, hora_fin):
     if dia_numero not in agenda[str(id)]:
         return {"Respuesta": "Día no encontrado para el médico"}
 
-    agenda[str(id)][dia_numero] = [hora_inicio, hora_fin, fecha]
+    agenda[str(id)][dia_numero] = [hora_inicio, hora_fin, getDate()]
     escribir_csv()
     return agenda[str(id)][dia_numero]
 
 def eliminar_agenda(id_medico, dia_numero):
-    # Lee el contenido actual del archivo CSV
-    with open(ruta_archivo_agenda, 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-        filas = list(reader)
+    id_medico=str(id_medico)
+    dia_numero=str(dia_numero)
+    if id_medico in agenda and dia_numero in agenda[id_medico]:
+        agenda[id_medico].pop(dia_numero)
+        escribir_csv()
+        return {"message": "Elemento eliminado correctamente"}, 200
+    else:
+        return {"message": "No se ha encontrado el elemento a eliminar"}, 404
 
-    # Encuentra y elimina la línea con los parametros especificados
-    nuevas_filas = [fila for fila in filas if not (int(fila['id_medico']) == id_medico and int(fila['dia_numero']) == dia_numero)]
+def es_dia_valido(dia_str:str)->bool:
+    # Expresión regular para el formato "d/m/yyyy"
+    patron = re.compile(r'^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[0-2])/\d{4}$')
+    if patron.match(dia_str):
+        return True
+    else:
+        return False
 
-    # Escribe el contenido actualizado al archivo CSV
-    with open(ruta_archivo_agenda, 'w', newline='') as csvfile:
-        first_row = ['id_medico', 'dia_numero', 'hora_inicio', 'hora_fin', 'fecha_actualizacion']
-        writer = csv.DictWriter(csvfile, fieldnames=first_row)
-        writer.writeheader()
-        for fila in nuevas_filas:
-            writer.writerow(fila)
+def es_hora_valida(hora_str:str)->bool:
+    # Expresión regular para el formato "HH:MM"
+    patron = re.compile(r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    if patron.match(hora_str):
+        return True
+    else:
+        return False
+
+def getDate():
+    hoy = datetime.datetime.now()
+    fecha = hoy.strftime("%d/%m/%Y")
+    return fecha
 
 llenarAgenda()
-escribir_csv()
