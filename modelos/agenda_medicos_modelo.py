@@ -1,6 +1,6 @@
 # modelos/agenda_medicos_modelo.py
 import csv
-import datetime
+from datetime import datetime
 import re
 
 '''
@@ -10,6 +10,7 @@ segunda dimension:dia_numero
 tercera dimension: array con [hora_inicio,hora_fin,fecha_actualizacion]
 '''
 ruta_archivo_agenda='modelos/agenda_medicos.csv'
+agenda={}
 
 def llenarAgenda()->None:
     global agenda
@@ -47,6 +48,7 @@ def convertir_agenda_a_lista():
 
 def agregar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda
+    #falta verificar si el medico esta habilitado(ya hay funcion que verifica)
     if str(id) not in agenda:
         agenda[str(id)]={}
     agenda[str(id)][dia_numero]=[hora_inicio,hora_fin,getDate()]
@@ -55,6 +57,10 @@ def agregar_agenda(id, dia_numero, hora_inicio, hora_fin):
 
 def editar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda
+    #hay que cambiar esta funcion
+    '''
+    modificar los horarios de atención de un médico (PUT). (Por ejemplo, puede recibir los días que modifica el horario de atención de la forma [{"dia":1, "hora_inicio" : "10:00", "hora_fin":"17:00"},{"dia":3, "hora_inicio" : "8:00", "hora_fin":"12:00"}] para indicar que se modifican los horarios de atención de lunes y miercoles - puede haber cualquier combinacion de días de la semana entre el lunes y el viernes, pero se debe verificar que se modifique el horario solamente si el médico trabaja ese día, es decir, no se agregan nuevos dias de atención en esta consulta)
+    '''
     if str(id) not in agenda:
         return {"Respuesta": "ID de médico no encontrado"}
     if dia_numero not in agenda[str(id)]:
@@ -95,4 +101,32 @@ def getDate():
     fecha = hoy.strftime("%d/%m/%Y")
     return fecha
 
+def dentro_de_horario_de_atencion(id,hora_turno,fecha_solicitud)->bool:
+    if(agenda.get(id).get(fecha_a_dia_semana(fecha_solicitud))) is None:
+        print("El medico no atiende ese dia")
+        return False
+    hora_turno=datetime.strptime(hora_turno, '%H:%M').time()
+    hora_inicio=agenda.get(id).get(fecha_a_dia_semana(fecha_solicitud))[0]
+    hora_inicio = datetime.strptime(hora_inicio, '%H:%M').time()
+    hora_cierre=agenda.get(id).get(fecha_a_dia_semana(fecha_solicitud))[1]
+    hora_cierre=datetime.strptime(hora_cierre, '%H:%M').time()
+    
+    if hora_turno>=hora_inicio and hora_turno<=hora_cierre:
+        print("El turno se encuentra dentro del horario de trabajo")
+        return True
+    else:
+        print(f"El turno se encuentra fuera del horario de atencion, intente entre las{hora_inicio} y {hora_cierre}")
+        return False
+
+def fecha_a_dia_semana(fecha)->str:
+    fecha = datetime.strptime(fecha,'%d/%m/%Y')
+    semana=(fecha.weekday()+1)
+    #Como weekday toma a 0 como lunes y la consigna pide que domingo sea 0, se le suma 1 y se corrige en el caso de 7
+    if(semana==7):
+        semana=0
+    return str(semana)
+
 llenarAgenda()
+
+fecha_a_dia_semana('4/12/2023')
+dentro_de_horario_de_atencion('1','3:00','4/12/2023')

@@ -83,6 +83,16 @@ def editar_medico(id,dni:str,nombre:str,apellido:str,matricula:str,telefono:str,
     exportar_a_csv()
     return medicos[id-1]
 
+def es_medico_habilitado(id)->bool:
+    try:
+        id=int(id)
+        medicos[id-1]
+        if medicos[id-1]["habilitado"]=='True':
+            return True
+        else:
+            return False
+    except:
+        return False
 
 def importar_datos_desde_csv():
     """

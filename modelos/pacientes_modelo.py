@@ -16,6 +16,7 @@ def obtener_pacientes():
     return pacientes
 
 def obtener_pacientes_por_id(id):
+    #falta verificar
     return pacientes[id-1]
 
 def crear_paciente_manual(dni:int, nombre:str, apellido:str, telefono:str, email:str,direccion_calle:str,direccion_numero:str):
@@ -86,6 +87,12 @@ def eliminar_paciente_por_id(id_paciente):
     # Retorna el paciente eliminado
     return paciente_a_eliminar
 
+def es_paciente_en_lista(id) -> bool:
+    try:
+        id = int(id)
+    except:
+        return False
+    return 0 <= id-1 < len(pacientes)
 
 def importar_datos_desde_csv():
     """
@@ -93,12 +100,11 @@ def importar_datos_desde_csv():
     """
     global pacientes
     global id_paciente
-    pacientes = []  # Limpiamos la lista de pacientes antes de importar desde el archivo CSV
+    pacientes = []
 
     with open(ruta_archivo_pacientes, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            # Convertimos el ID de cadena a entero
             row['id'] = int(row['id'])
             pacientes.append(row) 
     if len(pacientes)>0:
@@ -116,5 +122,4 @@ def exportar_a_csv():
         writer.writeheader()
         for paciente in pacientes:
             writer.writerow(paciente)
-
 inicializar_pacientes()
