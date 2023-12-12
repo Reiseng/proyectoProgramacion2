@@ -1,6 +1,7 @@
 # modelos/agenda_medicos_modelo.py
 import csv
 from datetime import datetime
+from medicos_modelo import es_medico_habilitado
 import re
 
 '''
@@ -48,12 +49,14 @@ def convertir_agenda_a_lista():
 
 def agregar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda
-    #falta verificar si el medico esta habilitado(ya hay funcion que verifica)
-    if str(id) not in agenda:
-        agenda[str(id)]={}
-    agenda[str(id)][dia_numero]=[hora_inicio,hora_fin,getDate()]
-    escribir_csv()
-    return agenda[str(id)][dia_numero]
+    if es_medico_habilitado(id):
+        if str(id) not in agenda:
+            agenda[str(id)]={}
+        agenda[str(id)][dia_numero]=[hora_inicio,hora_fin,getDate()]
+        escribir_csv()
+        return agenda[str(id)][dia_numero]
+    else:
+        return {"response":"El medico no esta habilitado"}
 
 def editar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda

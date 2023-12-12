@@ -100,12 +100,11 @@ def importar_datos_desde_csv():
     """
     global medicos
     global id_medico
-    medicos = []  # Limpiamos la lista de medicos antes de importar desde el archivo CSV
+    medicos = []
 
     with open(ruta_archivo_medicos, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            # Convertimos el ID de cadena a entero
             row['id'] = int(row['id'])
             medicos.append(row) 
     if len(medicos)>0:

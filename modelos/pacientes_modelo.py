@@ -16,8 +16,11 @@ def obtener_pacientes():
     return pacientes
 
 def obtener_pacientes_por_id(id):
-    #falta verificar
-    return pacientes[id-1]
+    global pacientes
+    if 1 <= id <= len(pacientes):
+        return pacientes[id - 1]
+    else:
+        return None
 
 def crear_paciente_manual(dni:int, nombre:str, apellido:str, telefono:str, email:str,direccion_calle:str,direccion_numero:str):
     global id_paciente
@@ -71,20 +74,14 @@ def editar_paciente(id,dni:str,nombre:str,apellido:str,matricula:str,telefono:st
     return pacientes[id-1]
 
 def eliminar_paciente_por_id(id_paciente):
-
     global pacientes
-    
-    # Busca el paciente a eliminar
     paciente_a_eliminar = None
     for paciente in pacientes:
         if paciente['id'] == id_paciente:
             paciente_a_eliminar = paciente
             break
-    # Remueve el paciente de la lista
     pacientes = [paciente for paciente in pacientes if paciente['id'] != id_paciente]
-    # Exporta la lista actualizada a un archivo CSV
     exportar_a_csv()
-    # Retorna el paciente eliminado
     return paciente_a_eliminar
 
 def es_paciente_en_lista(id) -> bool:
