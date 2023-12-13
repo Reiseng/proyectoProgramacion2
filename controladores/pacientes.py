@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from modelos.pacientes_modelo import obtener_pacientes,obtener_pacientes_por_id,crear_paciente_manual,crear_pacientes_randomuserme,editar_paciente,eliminar_paciente_por_id
+from modelos.turnos_modelo import paciente_tiene_turnos
 pacientes_bp = Blueprint('pacientes', __name__)
 
 @pacientes_bp.route('/getpacientes',methods=['GET'])
@@ -58,7 +59,7 @@ def editpaciente(id_paciente):
 
 @pacientes_bp.route('/eliminarPaciente/<int:id_paciente>', methods=["DELETE"])
 def eliminar_paciente_json(id_paciente):
-    ##FALTA VERIFICAR SI TIENE TURNOS##
-    ##FALTA VERIFICAR SI TIENE TURNOS##
+    if(paciente_tiene_turnos(id_paciente)):
+        return jsonify({"mensaje":"No se puede eliminar un paciente con turnos asignados"})
     eliminar_paciente_por_id(id_paciente)
     return jsonify({"mensaje": "Paciente eliminado correctamente"}), 200

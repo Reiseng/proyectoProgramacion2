@@ -107,4 +107,10 @@ def es_fecha_futura(fecha_string)->bool:
     fecha_ingresada = datetime.strptime(fecha_string, '%d/%m/%Y').date()
     return fecha_ingresada >= fecha_actual
 
+def paciente_tiene_turnos(id)->bool:
+    id=str(id)
+    for turno in turnos:
+        if(turno['id_paciente'])==id:
+            return True
+    return False
 CargarTurnos()

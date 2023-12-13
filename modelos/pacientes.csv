@@ -1,7 +1,6 @@
 id,dni,nombre,apellido,telefono,email,direccion_calle,direccion_numero
 1,72137698,Noah,Martinez,(681) 322-9004,noah.martinez@example.com,College St,4842
 2,83259454,Felecia,Patterson,(912) 391-8856,felecia.patterson@example.com,Paddock Way,8489
-4,30630547,Rita,Ward,(952) 755-1754,rita.ward@example.com,E North St,2990
 5,11622883,Emiliano,Correa,(891) 963-7161,ritthy.simpson@example.com,H Y,1436
 6,44045934,Russell,Moore,(427) 987-0752,russell.moore@example.com,W Pecan St,4394
 7,13643668,Violet,Patterson,(803) 422-8186,violet.patterson@example.com,Harrison Ct,4581

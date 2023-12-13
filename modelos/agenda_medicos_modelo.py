@@ -1,7 +1,7 @@
 # modelos/agenda_medicos_modelo.py
 import csv
 from datetime import datetime
-from medicos_modelo import es_medico_habilitado
+from modelos.medicos_modelo import es_medico_habilitado
 import re
 
 '''
