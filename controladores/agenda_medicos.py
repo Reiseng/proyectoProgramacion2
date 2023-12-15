@@ -26,15 +26,9 @@ def agregaragenda():
        data['id_medico'],
        data['dia_numero'],
        data['hora_inicio'],
-       data['hora_fin']
-       )
+       data['hora_fin'])
     return jsonify(agenda_agregada),201
 
-#Hay que ver para que se puedan editar varios dias a la ves
-# "modificar los horarios de atención de un médico (PUT). (Por ejemplo, puede recibir los días que 
-# modifica el horario de atención de la forma 
-# [{"dia":1, "hora_inicio" : "10:00", "hora_fin":"17:00"},{"dia":3, "hora_inicio" : "8:00", "hora_fin":"12:00"}]
-#  para indicar que se modifican los horarios de atención de lunes y miercoles"
 @agenda_bp.route('/editaragenda/<int:id_medico>', methods=['PUT'])
 def editagenda(id_medico):
     data = request.get_json()

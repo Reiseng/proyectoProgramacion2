@@ -41,7 +41,7 @@ def get_turnos_pendientes_por_id(id_medico):
     return turnosFiltrados
 
 def se_puede_agregar_turno(id_medico,id_paciente,hora_turno,fecha_solicitud)->bool:
-    if es_medico_habilitado(id_medico) and es_paciente_en_lista(id_paciente) and es_fecha_mes_siguiente(fecha_solicitud) and not hay_turno_ocupado(id_medico,hora_turno,fecha_solicitud) and dentro_de_horario_de_atencion(id_medico,hora_turno,fecha_solicitud):
+    if es_medico_habilitado(id_medico) and es_paciente_en_lista(id_paciente) and es_fecha_mes_siguiente(fecha_solicitud) and not hay_turno_ocupado(id_medico,hora_turno,fecha_solicitud) and dentro_de_horario_de_atencion(id_medico,hora_turno,fecha_solicitud) and turno_minutos_validos(hora_turno):
         return True
     else:
         #no se cumplen las condiciones para agregar el turno
@@ -57,20 +57,16 @@ def agregar_turno(id_medico, id_paciente, hora_turno, fecha_solicitud):
     }
     turnos.append(nuevo_turno)
 
-    # Verificar si el archivo existe
     archivo_existente = os.path.isfile(ruta_archivo_turnos)
 
     with open(ruta_archivo_turnos, 'a', newline='') as csvfile:
         fieldnames = ['id_medico', 'id_paciente', 'hora_turno', 'fecha_solicitud']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        # Escribir el encabezado solo si el archivo está vacío
         if not archivo_existente:
             writer.writeheader()
         else:
-            # Agregar salto de línea después del encabezado
-            csvfile.write('\n')
-
+            csvfile.write('')
         writer.writerow(nuevo_turno)
 
     return nuevo_turno
@@ -92,9 +88,19 @@ def hay_turno_ocupado(id_medico,hora_turno,fecha_solicitud)->bool:
     for turno in turnos:
         if turno['id_medico']==id_medico and turno['hora_turno']==hora_turno and turno['fecha_solicitud']==fecha_solicitud:
             return True
-        else:
-            continue
     return False
+
+def turno_minutos_validos(strtiempo)->bool:
+    try:
+        _, minutos = map(int, strtiempo.split(':'))
+        if minutos not in [0, 15, 30, 45]:
+            return False
+        else:
+            return True
+    except ValueError:
+        print(ValueError)
+        return False
+
 
 def es_fecha_mes_siguiente(fecha_string)->bool:
     fecha_ingresada= datetime.strptime(fecha_string, '%d/%m/%Y').date()

@@ -1,4 +1,5 @@
-from flask import Flask,blueprints
+#Integrantes: Emiliano Correa, Facundo Reiseng
+from flask import Flask
 from controladores.medicos import medicos_bp
 from controladores.pacientes import pacientes_bp
 from controladores.agenda_medicos import agenda_bp

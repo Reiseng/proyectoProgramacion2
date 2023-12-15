@@ -35,7 +35,6 @@ def escribir_csv()->None:
         for string in csvlist:
             csvfile.write(string + '\n')
 
-
 def convertir_agenda_a_lista():
     csv_list=[]
     for medic_id,dias_dict in agenda.items():
@@ -49,26 +48,31 @@ def convertir_agenda_a_lista():
 
 def agregar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda
-    if es_medico_habilitado(id):
+    try:
+        dia_comparacion=int(dia_numero)
+    except:
+        return {"response":"El dia_numero debe ser un numero entre 0 y 6, lo que ha insertado no es un numero"}
+    if dia_comparacion<0 or dia_comparacion>6:
+        return {"response":"El dia_numero debe ser un numero entre 0 y 6"}
+    if not es_medico_habilitado(id):
+        return {"response":"El medico no esta habilitado"}
+    if es_hora_valida(hora_inicio) and es_hora_valida(hora_fin) and es_dia_valido(getDate()):
         if str(id) not in agenda:
             agenda[str(id)]={}
         agenda[str(id)][dia_numero]=[hora_inicio,hora_fin,getDate()]
+        print(agenda[id])
         escribir_csv()
         return agenda[str(id)][dia_numero]
     else:
-        return {"response":"El medico no esta habilitado"}
+        return {"response":"Datos ingresados invalidos"}
 
 def editar_agenda(id, dia_numero, hora_inicio, hora_fin):
     global agenda
-    #hay que cambiar esta funcion
-    '''
-    modificar los horarios de atención de un médico (PUT). (Por ejemplo, puede recibir los días que modifica el horario de atención de la forma [{"dia":1, "hora_inicio" : "10:00", "hora_fin":"17:00"},{"dia":3, "hora_inicio" : "8:00", "hora_fin":"12:00"}] para indicar que se modifican los horarios de atención de lunes y miercoles - puede haber cualquier combinacion de días de la semana entre el lunes y el viernes, pero se debe verificar que se modifique el horario solamente si el médico trabaja ese día, es decir, no se agregan nuevos dias de atención en esta consulta)
-    '''
+
     if str(id) not in agenda:
         return {"Respuesta": "ID de médico no encontrado"}
     if dia_numero not in agenda[str(id)]:
-        return {"Respuesta": "Día no encontrado para el médico"}
-
+        return {"Respuesta": "Día no encontrado para el médico, no puedes agregar nuevos dias utilizando PUT, debes realizarlo con POST"}
     agenda[str(id)][dia_numero] = [hora_inicio, hora_fin, getDate()]
     escribir_csv()
     return agenda[str(id)][dia_numero]
@@ -82,6 +86,15 @@ def eliminar_agenda(id_medico, dia_numero):
         return {"message": "Elemento eliminado correctamente"}, 200
     else:
         return {"message": "No se ha encontrado el elemento a eliminar"}, 404
+
+def eliminar_medico_de_agenda(id_medico):
+    global agenda
+    if str(id_medico) in agenda:
+        del agenda[str(id_medico)]
+        escribir_csv()
+        print(f"El médico con ID {id_medico} ha sido eliminado de la agenda.")
+    else:
+        print(f"No se encontró ningún médico con el ID {id_medico} en la agenda.")
 
 def es_dia_valido(dia_str:str)->bool:
     # Expresión regular para el formato "d/m/yyyy"
@@ -100,7 +113,7 @@ def es_hora_valida(hora_str:str)->bool:
         return False
 
 def getDate():
-    hoy = datetime.datetime.now()
+    hoy = datetime.now()
     fecha = hoy.strftime("%d/%m/%Y")
     return fecha
 
@@ -115,10 +128,10 @@ def dentro_de_horario_de_atencion(id,hora_turno,fecha_solicitud)->bool:
     hora_cierre=datetime.strptime(hora_cierre, '%H:%M').time()
     
     if hora_turno>=hora_inicio and hora_turno<=hora_cierre:
-        print("El turno se encuentra dentro del horario de trabajo")
+        #print("El turno se encuentra dentro del horario de trabajo")
         return True
     else:
-        print(f"El turno se encuentra fuera del horario de atencion, intente entre las{hora_inicio} y {hora_cierre}")
+        #print(f"El turno se encuentra fuera del horario de atencion, intente entre las{hora_inicio} y {hora_cierre}")
         return False
 
 def fecha_a_dia_semana(fecha)->str:
@@ -130,6 +143,3 @@ def fecha_a_dia_semana(fecha)->str:
     return str(semana)
 
 llenarAgenda()
-
-fecha_a_dia_semana('4/12/2023')
-dentro_de_horario_de_atencion('1','3:00','4/12/2023')

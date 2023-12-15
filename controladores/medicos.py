@@ -25,18 +25,23 @@ def agregarMedicoManual():
 
 @medicos_bp.route('/agregarMedicosRandom/<int:cantidad>',methods=['POST'])
 def agregarMedicoRandom(cantidad):
+    #retorna 201 incluso en error, corregir
     medicos_creados=crear_medicos_randomuserme(cantidad)
     return jsonify(medicos_creados),201
 
 @medicos_bp.route('/inhabilitarMedico/<int:id_medico>',methods=['PUT'])
 def desactivarMedico(id_medico):
     medico_inhabilitado=inhabilitar_medico(id_medico)
-    return jsonify(medico_inhabilitado)
+    if medico_inhabilitado==False:
+        return {"Respuesta: El medico solicitado no fue encontrado"},404
+    return jsonify(medico_inhabilitado),200
 
 @medicos_bp.route('/habilitarMedico/<int:id_medico>',methods=['PUT'])
 def activarMedico(id_medico):
     medico_habilitado=habilitar_medico(id_medico)
-    return jsonify(medico_habilitado)
+    if medico_habilitado==False:
+        return {"Respuesta: El medico solicitado no fue encontrado"},404
+    return jsonify(medico_habilitado),200
 
 @medicos_bp.route('/editarMedico/<int:id_medico>',methods=['PUT'])
 def editMedico(id_medico):
@@ -62,4 +67,4 @@ def editMedico(id_medico):
         medico['email'],
         medico['habilitado']
         )
-    return jsonify(medico_editado)
+    return jsonify(medico_editado),200

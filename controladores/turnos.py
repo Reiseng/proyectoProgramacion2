@@ -6,7 +6,7 @@ turnos_bp= Blueprint('turnos',__name__)
 @turnos_bp.route('/getTurnos', methods=['GET'])
 def getTurnosJson():
     if len(turnos)==0:
-        return {"Response":"No hay turnos registrados"},200
+        return {"Response":"No hay turnos registrados"},204
     return jsonify(turnos), 200
 
 @turnos_bp.route('/getTurnosPendientes/<int:id_medico>', methods=['GET'])

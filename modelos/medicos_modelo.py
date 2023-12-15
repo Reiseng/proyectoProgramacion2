@@ -56,16 +56,19 @@ def crear_medicos_randomuserme(cantidad):
     exportar_a_csv()
     return medicos[-cantidad:]
 
+
 def inhabilitar_medico(id):
     if id<1 or id>len(medicos)+1:
-        return {"Respuesta":"Indice Invalido"}
+        return False
     medicos[id-1]["habilitado"]=False
+    from modelos.agenda_medicos_modelo import eliminar_medico_de_agenda
+    eliminar_medico_de_agenda(id)
     exportar_a_csv()
     return medicos[id-1]
 
 def habilitar_medico(id):
     if id<1 or id>len(medicos)+1:
-        return {"Respuesta":"Indice Invalido"}
+        return False
     medicos[id-1]["habilitado"]=True
     exportar_a_csv()
     return medicos[id-1]
